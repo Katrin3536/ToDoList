@@ -1,11 +1,13 @@
 import React from 'react';
- type ButtonPropsType = {
-     title: string
-     onClickRemoveTask?:()=> void
- }
-const Button = (props:ButtonPropsType) => {
+
+type ButtonPropsType = {
+    title: string
+    onClickHandler: () => void,
+    btnClass?: string,
+}
+const Button: React.FC<ButtonPropsType> = (props) => {
     return (
-        <button onClick={props.onClickRemoveTask}>{props.title}</button>
+        <button className={props.btnClass} onClick={props.onClickHandler}>{props.title}</button>
     );
 };
 

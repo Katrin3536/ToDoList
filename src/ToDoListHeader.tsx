@@ -1,11 +1,20 @@
 import React from 'react';
 
 type ToDoListHeaderPropsType = {
+    todolistID:string,
+    removeTodolist: (todolistID: string) => void
     title: string
 }
-const ToDoListHeader = (props:ToDoListHeaderPropsType) => {
+const ToDoListHeader: React.FC<ToDoListHeaderPropsType> = (props) => {
+    const removeTodolistHandler = () => {
+      props.removeTodolist(props.todolistID)
+    }
+
     return (
-        <h3>{props.title}</h3>
+        <h3>
+            {props.title}
+            <button onClick={removeTodolistHandler}>X</button>
+        </h3>
     );
 };
 

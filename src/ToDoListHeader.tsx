@@ -1,19 +1,28 @@
 import React from 'react';
+import EditableSpan from './components/EditableSpan';
+import {Delete} from '@mui/icons-material';
+import {IconButton} from '@mui/material';
 
 type ToDoListHeaderPropsType = {
-    todolistID:string,
+    todolistID: string,
     removeTodolist: (todolistID: string) => void
     title: string
+    editTitleTodolist: (todolistID: string, title: string) => void
 }
 const ToDoListHeader: React.FC<ToDoListHeaderPropsType> = (props) => {
     const removeTodolistHandler = () => {
-      props.removeTodolist(props.todolistID)
-    }
+        props.removeTodolist(props.todolistID);
+    };
 
+    const editTitle = (title: string) => {
+        props.editTitleTodolist(props.todolistID, title);
+    };
     return (
         <h3>
-            {props.title}
-            <button onClick={removeTodolistHandler}>X</button>
+            <EditableSpan title={props.title} callback={editTitle}/>
+            <IconButton onClick={removeTodolistHandler}>
+                <Delete/>
+            </IconButton>
         </h3>
     );
 };

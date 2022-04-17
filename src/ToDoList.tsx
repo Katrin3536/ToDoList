@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FilterValuesType, TaskType} from './App';
 import ToDoListHeader from './ToDoListHeader';
-import Button from './Button';
 import TaskList from './TaskList';
+import AddItemForm from './components/AddItemForm';
+import Button from '@mui/material/Button';
 
 type ToDoListPropsType = {
     todolistID: string
@@ -14,22 +15,26 @@ type ToDoListPropsType = {
     changeFilter: (todolistID: string, filter: FilterValuesType) => void,
     changeStatus: (todolistID: string, id: string, newIsDone: boolean) => void
     removeTodolist: (todolistID: string) => void
+    onChangeTitle: (todolistID: string, Taskid: string, title: string) => void
+    editTitleTodolist: (todolistID: string, title: string) => void
 }
 
-const ToDoList: React.FC<ToDoListPropsType>=({todolistID,titleEL,filter,tasks,removeTasks,addTask,changeFilter, ...restProps})=> {
+const ToDoList: React.FC<ToDoListPropsType> = ({
+                                                   todolistID,
+                                                   titleEL,
+                                                   filter,
+                                                   tasks,
+                                                   removeTasks,
+                                                   addTask,
+                                                   changeFilter,
+                                                   ...restProps
+                                               }) => {
 
-    const [title, setTitle] = useState<string>('');
-    const [error, setError] = useState<boolean>(false);
 
-    const addTasks = () => {
-        const trimmed = title.trim();
-        if (trimmed) {
-            addTask(todolistID, trimmed);
-        } else {
-            setError(true);
-        }
-        setTitle('');
+    const addItem = (title: string) => {
+        addTask(todolistID, title);
     };
+
 
     return (
         <div>
@@ -37,43 +42,46 @@ const ToDoList: React.FC<ToDoListPropsType>=({todolistID,titleEL,filter,tasks,re
                 title={titleEL}
                 todolistID={todolistID}
                 removeTodolist={restProps.removeTodolist}
+                editTitleTodolist={restProps.editTitleTodolist}
 
             />
-            <div>
-                <input
-                    className={error ? 'error' : ''}
-                    value={title}
-                    onChange={(e) => {
-                        setTitle(e.currentTarget.value);
-                        setError(false);
-                    }}
 
-                    onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                            addTasks();
-                        }
-                    }}/>
-                <Button onClickHandler={addTasks} title={'+'}/>
-                {error && <div className={'message-error'}>Title is required</div>}
-            </div>
+            <AddItemForm callback={addItem}/>
+
             <TaskList
                 todolistID={todolistID}
                 tasks={tasks}
                 removeTasks={removeTasks}
                 changeStatus={restProps.changeStatus}
+                onChangeTitle={restProps.onChangeTitle}
             />
 
             <div>
-                <Button btnClass={filter === 'All' ? 'btn-active' : ''}
-                        onClickHandler={() => changeFilter(todolistID, 'All')} title={'All'}/>
-                <Button btnClass={filter === 'Active' ? 'btn-active' : ''}
-                        onClickHandler={() => changeFilter(todolistID, 'Active')} title={'Active'}/>
-                <Button btnClass={filter === 'Completed' ? 'btn-active' : ''}
-                        onClickHandler={() => changeFilter(todolistID, 'Completed')} title={'Completed'}/>
+                <Button
+                    variant={filter === 'All' ? 'contained' : 'text'}
+                    onClick={() => changeFilter(todolistID, 'All')}
+                    color={'secondary'}
+                    size={'small'}>
+                    All
+                </Button>
+                <Button
+                    variant={filter === 'Active' ? 'contained' : 'text'}
+                    onClick={() => changeFilter(todolistID, 'Active')}
+                    color={'error'}
+                    size={'small'}>
+                    Active
+                </Button>
+                <Button
+                    variant={filter === 'Completed' ? 'contained' : 'text'}
+                    onClick={() => changeFilter(todolistID, 'Completed')}
+                    color={'success'}
+                    size={'small'}>
+                    Completed
+                </Button>
 
             </div>
         </div>
     );
-}
+};
 
 export default ToDoList;

@@ -9,6 +9,7 @@ type ToDoListHeaderPropsType = {
     title: string
     editTitleTodolist: (todolistID: string, title: string) => void
 }
+
 const ToDoListHeader: React.FC<ToDoListHeaderPropsType> = (props) => {
     const removeTodolistHandler = () => {
         props.removeTodolist(props.todolistID);

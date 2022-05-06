@@ -1,5 +1,5 @@
 import React from 'react';
-import {TaskType} from './App';
+import {TaskType} from './AppWithRedux';
 import EditableSpan from './components/EditableSpan';
 import {Checkbox, IconButton} from '@mui/material';
 import {Delete} from '@mui/icons-material';

@@ -1,5 +1,5 @@
 import React from 'react';
-import {FilterValuesType, TaskType} from './App';
+import {FilterValuesType, TaskType} from './AppWithRedux';
 import ToDoListHeader from './ToDoListHeader';
 import TaskList from './TaskList';
 import AddItemForm from './components/AddItemForm';

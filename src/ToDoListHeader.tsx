@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import EditableSpan from './components/EditableSpan';
 import {Delete} from '@mui/icons-material';
 import {IconButton} from '@mui/material';
+
 
 type ToDoListHeaderPropsType = {
     todolistID: string,
@@ -15,9 +16,9 @@ const ToDoListHeader: React.FC<ToDoListHeaderPropsType> = (props) => {
         props.removeTodolist(props.todolistID);
     };
 
-    const editTitle = (title: string) => {
+    const editTitle = useCallback((title: string) => {
         props.editTitleTodolist(props.todolistID, title);
-    };
+    }, [props.todolistID,props.editTitleTodolist ]);
     return (
         <h3>
             <EditableSpan title={props.title} callback={editTitle}/>

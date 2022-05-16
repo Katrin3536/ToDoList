@@ -6,9 +6,9 @@ type AddItemFormType = {
     callback: (title: string) => void,
 }
 
-const AddItemForm = (props: AddItemFormType) => {
+const AddItemForm = React.memo((props: AddItemFormType) => {
     const [title, setTitle] = useState<string>('');
-    const [error, setError] = useState<boolean>(false);
+    const [error, setError] = useState<boolean | null>(false);
 
     const addTasks = () => {
         const trimmed = title.trim();
@@ -34,6 +34,9 @@ const AddItemForm = (props: AddItemFormType) => {
                 helperText={error}
                 value={title}
                 onKeyPress={(e) => {
+                    if (error !== null) {
+                        setError(null)
+                    }
                     if (e.key === 'Enter') {
                         addTasks();
                     }
@@ -44,6 +47,6 @@ const AddItemForm = (props: AddItemFormType) => {
             </IconButton>
         </div>
     );
-};
+});
 
 export default AddItemForm;

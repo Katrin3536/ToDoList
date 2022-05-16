@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {FilterValuesType, TaskType} from './AppWithRedux';
 import ToDoListHeader from './ToDoListHeader';
-import TaskList from './TaskList';
+import {TaskList} from './TaskList';
 import AddItemForm from './components/AddItemForm';
 import Button from '@mui/material/Button';
 
@@ -31,10 +31,21 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
                                                }) => {
 
 
-    const addItem = (title: string) => {
+    const addItem = useCallback((title: string) => {
         addTask(todolistID, title);
-    };
+    },[addTask,todolistID]);
 
+    let taskForToDoList;
+    switch (filter) {
+        case 'Active':
+            taskForToDoList = tasks.filter(t => !t.isDone);
+            break;
+        case 'Completed':
+            taskForToDoList = tasks.filter(t => t.isDone);
+            break;
+        default:
+            taskForToDoList = tasks;
+    }
 
     return (
         <div>
@@ -50,7 +61,7 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
 
             <TaskList
                 todolistID={todolistID}
-                tasks={tasks}
+                tasks={taskForToDoList}
                 removeTasks={removeTasks}
                 changeStatus={restProps.changeStatus}
                 onChangeTitle={restProps.onChangeTitle}
@@ -59,26 +70,25 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
             <div>
                 <Button
                     variant={filter === 'All' ? 'contained' : 'text'}
-                    onClick={() => changeFilter(todolistID, 'All')}
+                    onClick={useCallback(() => changeFilter(todolistID, 'All'), [changeFilter, todolistID])}
                     color={'secondary'}
                     size={'small'}>
                     All
                 </Button>
                 <Button
                     variant={filter === 'Active' ? 'contained' : 'text'}
-                    onClick={() => changeFilter(todolistID, 'Active')}
+                    onClick={useCallback(() => changeFilter(todolistID, 'Active'), [changeFilter, todolistID])}
                     color={'error'}
                     size={'small'}>
                     Active
                 </Button>
                 <Button
                     variant={filter === 'Completed' ? 'contained' : 'text'}
-                    onClick={() => changeFilter(todolistID, 'Completed')}
+                    onClick={useCallback(() => changeFilter(todolistID, 'Completed'), [changeFilter, todolistID])}
                     color={'success'}
                     size={'small'}>
                     Completed
                 </Button>
-
             </div>
         </div>
     );

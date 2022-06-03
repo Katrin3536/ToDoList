@@ -13,7 +13,8 @@ type TaskListPropsType = {
 
 export const TaskList = React.memo((props:TaskListPropsType) => {
 
-    const tasksJSElements = props.tasks.map(t => <Task onChangeTitle={props.onChangeTitle}
+    const tasksJSElements = props.tasks?.map(t => <Task key={t.id}
+                                                       onChangeTitle={props.onChangeTitle}
                                                        removeTasks={props.removeTasks}
                                                        todolistID={props.todolistID}
                                                        changeStatus={props.changeStatus}

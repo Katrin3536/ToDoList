@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import ToDoList from './ToDoList';
 import AddItemForm from './components/AddItemForm';
@@ -7,31 +7,23 @@ import {Button, IconButton, Typography} from '@mui/material';
 import {Menu} from '@mui/icons-material';
 import {useDispatch, useSelector} from 'react-redux';
 import {AppRootStateType} from './state/store';
-import {addTodolistAC, changeTitleTodolistAC, filterChangeTodolistAC, removeTodolistAC} from './state/todolist-reducer';
+import {addTodolistAC, changeTitleTodolistAC, filterChangeTodolistAC, FilterValuesType, removeTodolistAC, TodolistDomainType} from './state/todolist-reducer';
 import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from './state/tasks-reducer';
-
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
-export type FilterValuesType = 'All' | 'Active' | 'Completed'
-
-export type TodolistsType = {
-    id: string,
-    title: string,
-    filter: FilterValuesType
-}
+import {TaskStatuses, TaskType, todolistAPI} from './api/todolist-api';
 
 export type TodolistTaskType = {
     [key: string]: Array<TaskType>
 }
 
 function AppWithRedux() {
-
     let dispatch = useDispatch();
-    const todolists = useSelector<AppRootStateType, Array<TodolistsType>>(state => state.todolists);
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TodolistTaskType>(state => state.tasks);
+
+    // useEffect(()=>{
+    //     todolistAPI.getTodolist()
+    //         .then(res=>res.data)
+    // },[])
 
     const removeTodolist = useCallback((todolistID: string) => {
         dispatch(removeTodolistAC(todolistID));
@@ -53,8 +45,8 @@ function AppWithRedux() {
         // setTodolists(todolists.map(el => el.id === todolistID ? {...el, filter} : el));
     },[]);
 
-    const changeStatus = useCallback((todolistID: string, id: string, newIsDone: boolean) => {
-        dispatch(changeTaskStatusAC(todolistID, id, newIsDone))
+    const changeStatus = useCallback((todolistID: string, id: string, status: TaskStatuses) => {
+        dispatch(changeTaskStatusAC(todolistID, id, status))
         // setTasks({...tasks, [todolistID]: tasks[todolistID].map(el => el.id === id ? {...el, isDone: newIsDone} : el)});
     },[]);
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Task } from './components/Task';
-import {TaskStatuses, TaskType} from './api/todolist-api';
+import { Task } from '../Task/Task';
+import {TaskStatuses, TaskType} from '../../../api/todolist-api';
 
 
 type TaskListPropsType = {
@@ -11,7 +11,7 @@ type TaskListPropsType = {
     onChangeTitle: (todolistID: string, Taskid: string, title: string) => void
 }
 
-export const TaskList = React.memo((props:TaskListPropsType) => {
+export const TasksList = React.memo((props:TaskListPropsType) => {
 
     const tasksJSElements = props.tasks?.map(t => <Task key={t.id}
                                                        onChangeTitle={props.onChangeTitle}

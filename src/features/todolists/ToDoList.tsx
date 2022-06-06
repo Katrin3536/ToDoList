@@ -1,11 +1,11 @@
 import React, {useCallback, useEffect} from 'react';
-import ToDoListHeader from './ToDoListHeader';
-import {TaskList} from './TaskList';
-import AddItemForm from './components/AddItemForm';
+import ToDoListHeader from './TodolistHeader/ToDoListHeader';
+import {TasksList} from './TasksList/TasksList';
+import AddItemForm from '../../components/AddItemsForm/AddItemForm';
 import Button from '@mui/material/Button';
-import {FilterValuesType} from './state/todolist-reducer';
-import {TaskStatuses, TaskType} from './api/todolist-api';
-import {fetchTasksTC} from './state/tasks-reducer';
+import {FilterValuesType} from './todolist-reducer';
+import {TaskStatuses, TaskType} from '../../api/todolist-api';
+import {fetchTasksTC} from './tasks-reducer';
 import { useDispatch } from 'react-redux';
 
 type ToDoListPropsType = {
@@ -37,7 +37,7 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
 
     useEffect(()=>{
         dispatch(fetchTasksTC(todolistID))
-    },[])
+    },[dispatch, todolistID])
 
     const addItem = useCallback((title: string) => {
         addTask(todolistID, title);
@@ -67,7 +67,7 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
 
             <AddItemForm callback={addItem}/>
 
-            <TaskList
+            <TasksList
                 todolistID={todolistID}
                 tasks={taskForToDoList}
                 removeTasks={removeTasks}

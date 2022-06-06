@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {WatchLater} from '@mui/icons-material';
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -67,7 +66,11 @@ export type UpdateTaskModelType = {
     title: string,
     description: string,
 }
-
+type GetTasksResponse = {
+    error: string | null
+    totalCount: number
+    items: TaskType[]
+}
 
 export const todolistAPI = {
     updateTodolist(todolistId: string, title: string) {
@@ -84,10 +87,10 @@ export const todolistAPI = {
         return instance.delete<ResponseType>(`todo-lists/${todolistId}`);
     },
     getTasks(todolistId: string) {
-        return instance.get<TaskType[]>(`todo-lists/${todolistId}/tasks`);
+        return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
     },
     createTask(todolistId: string, title: string) {
-        return instance.post<BaseResponseType<TaskType>>(`todo-lists/${todolistId}/tasks`, {title});
+        return instance.post<BaseResponseType<{item:TaskType}>>(`todo-lists/${todolistId}/tasks`, {title});
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<BaseResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`);

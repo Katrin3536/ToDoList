@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import EditableSpan from '../../../components/EditableSpan/EditableSpan';
-import {Delete} from '@mui/icons-material';
-import {IconButton} from '@mui/material';
+import Delete from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 
 type ToDoListHeaderPropsType = {

@@ -11,7 +11,8 @@ import {
 } from './todolist-reducer';
 import {addTaskTC, removeTaskTC, updateTaskStatusTC, updateTaskTitleTC} from './tasks-reducer';
 import {TaskStatuses} from '../../api/todolist-api';
-import {Grid, Paper} from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 import AddItemForm from '../../components/AddItemsForm/AddItemForm';
 import ToDoList from './ToDoList';
 import {TodolistTaskType} from '../../app/App';

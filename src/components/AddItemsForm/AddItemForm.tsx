@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {IconButton, TextField} from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import {AddBox} from '@mui/icons-material';
 
 type AddItemFormType = {

@@ -7,10 +7,12 @@ import {AppRootStateType} from './store';
 import {tasksReducer} from '../features/todolists/tasks-reducer';
 import {todolistReducer} from '../features/todolists/todolist-reducer';
 import {TaskPriorities, TaskStatuses} from '../api/todolist-api';
+import {appReducer} from './app-reducer';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
-    todolists: todolistReducer
+    todolists: todolistReducer,
+    app:appReducer
 });
 
 const initialGlobalState = {
@@ -71,6 +73,9 @@ const initialGlobalState = {
                 priority: TaskPriorities.Low
             }
         ]
+    },
+    app: {
+        status:'loaging'
     }
 };
 

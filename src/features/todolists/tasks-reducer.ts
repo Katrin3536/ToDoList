@@ -1,9 +1,15 @@
 import {TodolistTaskType} from '../../app/App';
-import {AddTodolistActionType, RemoveTodolistActionType, SetTodolistsActionType} from './todolist-reducer';
-import {TaskStatuses, TaskType, todolistAPI, UpdateTaskModelType} from '../../api/todolist-api';
+import {
+    AddTodolistActionType,
+    RemoveTodolistActionType,
+    SetTodolistsActionType
+} from './todolist-reducer';
+import {TaskStatuses, TaskType, todolistsApi, UpdateTaskModelType} from '../../api/todolists-api';
 import {Dispatch} from 'redux';
 import {AppRootStateType} from '../../app/store';
-import {setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer';
+import {RequestStatusType, SetAppErrorActionType, setAppStatusAC, SetAppStatusActionType} from '../../app/app-reducer';
+import {AxiosError} from 'axios';
+import {handleAppError, handleNetworkError} from '../../utils/errorUtils';
 
 const inisialState: TodolistTaskType = {};
 
@@ -22,6 +28,7 @@ export const tasksReducer = (state: TodolistTaskType = inisialState, action: Act
             return {...state, [action.todolistID]: state[action.todolistID].filter(el => el.id !== action.taskId)};
         }
         case 'TASKS/ADD-TASK':
+            console.log(action.task);
             return {...state, [action.task.todoListId]: [action.task, ...state[action.task.todoListId]]};
         case 'TASKS/CHANGE-TASK-STATUS':
             return {
@@ -41,6 +48,17 @@ export const tasksReducer = (state: TodolistTaskType = inisialState, action: Act
             let copyState = {...state};
             delete copyState[action.id];
             return copyState;
+        case 'TASKS/CHANGE-TASK-ENTITY-STATUS':
+            console.log(JSON.stringify({
+                ...state,
+                [action.todolistID]: state[action.todolistID]
+                    .map(el => el.id !== action.taskId ? {...el, entityStatus: action.entityStatus} : el)
+            }));
+            return {
+                ...state,
+                [action.todolistID]: state[action.todolistID]
+                    .map(el => el.id !== action.taskId ? {...el, entityStatus: action.entityStatus} : el)
+            };
         default:
             return state;
     }
@@ -62,32 +80,49 @@ export const setTasksAC = (tasks: Array<TaskType>, todolistId: string) => ({
     tasks,
     todolistId
 } as const);
+export const changeTaskEntityStatusAC = (todolistID: string, taskId: string, entityStatus: RequestStatusType) =>
+    ({type: 'TASKS/CHANGE-TASK-ENTITY-STATUS', todolistID, taskId, entityStatus} as const);
 
 //thunks
 export const fetchTasksTC = (todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'));
-    todolistAPI.getTasks(todolistId)
+    todolistsApi.getTasks(todolistId)
         .then((res) => {
             dispatch(setTasksAC(res.data.items, todolistId));
             dispatch(setAppStatusAC('succeeded'));
+        })
+        .catch((err: AxiosError) => {
+            handleNetworkError(dispatch, err.message);
         });
 };
 export const removeTaskTC = (todolistId: string, taskId: string,) => (dispatch: Dispatch<ActionsType>) => {
     dispatch(setAppStatusAC('loading'));
-    todolistAPI.deleteTask(todolistId, taskId)
+    dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'loading'));
+    todolistsApi.deleteTask(todolistId, taskId)
         .then((res) => {
             dispatch(removeTaskAC(todolistId, taskId));
             dispatch(setAppStatusAC('succeeded'));
+        })
+        .catch((err: AxiosError) => {
+            handleNetworkError(dispatch, err.message);
         });
 };
-export const addTaskTC = (todolistId: string, title: string,) => (dispatch: Dispatch<ActionsType>) => {
-    dispatch(setAppStatusAC('loading'));
-    todolistAPI.createTask(todolistId, title)
-        .then((res) => {
-            dispatch(addTaskAC(res.data.data.item));
-            dispatch(setAppStatusAC('succeeded'));
-        });
-};
+export const addTaskTC = (title: string, todolistId: string) => (dispatch: Dispatch<ActionsType>) => {
+        dispatch(setAppStatusAC('loading'));
+        todolistsApi.createTask(todolistId, title)
+            .then(res => {
+                if (res.data.resultCode === 0) {
+                    dispatch(addTaskAC(res.data.data.item));
+                    dispatch(setAppStatusAC('succeeded'));
+                } else {
+                    handleAppError<{ item: TaskType }>(dispatch, res.data);
+                }
+            })
+            .catch((err: AxiosError) => {
+                handleNetworkError(dispatch, err.message);
+            });
+    }
+;
 export const updateTaskStatusTC = (todolistId: string, taskId: string, status: TaskStatuses) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
         const state = getState();
@@ -105,13 +140,17 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
 
             };
             dispatch(setAppStatusAC('loading'));
-            todolistAPI.updateTask(todolistId, taskId, model)
+            todolistsApi.updateTask(todolistId, taskId, model)
                 .then((res) => {
                     dispatch(changeTaskStatusAC(todolistId, taskId, status));
                     dispatch(setAppStatusAC('succeeded'));
+                })
+                .catch((err: AxiosError) => {
+                    handleNetworkError(dispatch, err.message);
                 });
         }
     };
+
 export const updateTaskTitleTC = (todolistId: string, taskId: string, title: string) =>
     (dispatch: Dispatch<ActionsType>, getState: () => AppRootStateType) => {
         const state = getState();
@@ -129,10 +168,13 @@ export const updateTaskTitleTC = (todolistId: string, taskId: string, title: str
 
             };
             dispatch(setAppStatusAC('loading'));
-            todolistAPI.updateTask(todolistId, taskId, model)
+            todolistsApi.updateTask(todolistId, taskId, model)
                 .then((res) => {
                     dispatch(changeTaskTitleAC(todolistId, taskId, title));
                     dispatch(setAppStatusAC('succeeded'));
+                })
+                .catch((err: AxiosError) => {
+                    handleNetworkError(dispatch, err.message);
                 });
         }
     };
@@ -148,3 +190,5 @@ export type ActionsType =
     | SetTodolistsActionType
     | ReturnType<typeof setTasksAC>
     | SetAppStatusActionType
+    | SetAppErrorActionType
+    | ReturnType<typeof changeTaskEntityStatusAC>

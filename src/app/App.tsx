@@ -8,7 +8,7 @@ import LinearProgress  from '@mui/material/LinearProgress';
 import Toolbar  from '@mui/material/Toolbar';
 import Typography  from '@mui/material/Typography';
 import Menu from '@mui/icons-material/Menu';
-import {TaskType} from '../api/todolist-api';
+import {TaskType} from '../api/todolists-api';
 import {TodolistsList} from '../features/todolists/TodolistsList';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from './store';

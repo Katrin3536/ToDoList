@@ -6,7 +6,7 @@ import {legacy_createStore as createStore} from 'redux';
 import {AppRootStateType} from './store';
 import {tasksReducer} from '../features/todolists/tasks-reducer';
 import {todolistReducer} from '../features/todolists/todolist-reducer';
-import {TaskPriorities, TaskStatuses} from '../api/todolist-api';
+import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 import {appReducer} from './app-reducer';
 
 const rootReducer = combineReducers({
@@ -17,8 +17,8 @@ const rootReducer = combineReducers({
 
 const initialGlobalState = {
     todolists: [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate: '', order: 0},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate: '', order: 0}
+        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'},
+        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate: '', order: 0, entityStatus: 'idle'}
     ],
     tasks: {
         ['todolistId1']: [
@@ -32,7 +32,8 @@ const initialGlobalState = {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             },
             {
                 id: v1(),
@@ -44,7 +45,8 @@ const initialGlobalState = {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             }
         ],
         ['todolistId2']: [
@@ -58,7 +60,8 @@ const initialGlobalState = {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle',
             },
             {
                 id: v1(),
@@ -70,12 +73,14 @@ const initialGlobalState = {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle',
             }
         ]
     },
     app: {
-        status:'loaging'
+        status:'loaging',
+        error: null
     }
 };
 

@@ -1,9 +1,11 @@
 import React, {ChangeEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
+import { RequestStatusType } from '../../app/app-reducer';
 
 type EditableSpanType = {
     title: string
     callback: (title: string) => void
+    entityStatus?: RequestStatusType
 }
 
 const EditableSpan = (props: EditableSpanType) => {
@@ -27,6 +29,7 @@ const EditableSpan = (props: EditableSpanType) => {
                 value={newTitle}
                 onChange={onChangeInput}
                 onBlur={offChangeSpan}
+                disabled={props.entityStatus==='loading'}
             />
             : <span onDoubleClick={changeSpan}>{props.title}</span>
     );

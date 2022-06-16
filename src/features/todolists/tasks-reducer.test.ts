@@ -8,7 +8,7 @@ import {
     tasksReducer
 } from './tasks-reducer';
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from './todolist-reducer';
-import {TaskPriorities, TaskStatuses} from '../../api/todolist-api';
+import {TaskPriorities, TaskStatuses} from '../../api/todolists-api';
 
 let startState: TodolistTaskType = {};
 
@@ -25,7 +25,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             },
             {
                 id: '2',
@@ -37,7 +38,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             },
             {
                 id: '3',
@@ -49,7 +51,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             }
         ],
         'todolistId2': [
@@ -63,7 +66,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             },
             {
                 id: '2',
@@ -75,7 +79,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             },
             {
                 id: '3',
@@ -87,7 +92,8 @@ beforeEach(() => {
                 startDate: '',
                 order: 0,
                 deadline: '',
-                priority: TaskPriorities.Low
+                priority: TaskPriorities.Low,
+                entityStatus: 'idle'
             }
         ]
     };
@@ -176,7 +182,8 @@ test('correct task should be added to correct array', () => {
         addedDate: '',
         id: 'sdf',
         title: 'juice',
-        priority: 0
+        priority: 0,
+        entityStatus: 'idle'
     });
 
     const endState = tasksReducer(startState, action);

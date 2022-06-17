@@ -30,7 +30,7 @@ TaskExampleIsDone.args = {
         order: 0,
         deadline: '',
         priority: TaskPriorities.Low,
-        entityStatus: 'idle'
+        entityStatus:'idle'
     },
 };
 
@@ -48,6 +48,6 @@ TaskExampleISNotDone.args = {
         order: 0,
         deadline: '',
         priority: TaskPriorities.Low,
-        entityStatus: 'idle'
+        entityStatus:'idle'
     },
 };

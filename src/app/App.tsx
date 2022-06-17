@@ -8,14 +8,14 @@ import LinearProgress  from '@mui/material/LinearProgress';
 import Toolbar  from '@mui/material/Toolbar';
 import Typography  from '@mui/material/Typography';
 import Menu from '@mui/icons-material/Menu';
-import {TaskType} from '../api/todolists-api';
+import {DomainTaskType, TaskType} from '../api/todolists-api';
 import {TodolistsList} from '../features/todolists/TodolistsList';
 import {useSelector} from 'react-redux';
 import {AppRootStateType} from './store';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
 
 export type TodolistTaskType = {
-    [key: string]: Array<TaskType>
+    [key: string]: Array<DomainTaskType>
 }
 
 function App() {

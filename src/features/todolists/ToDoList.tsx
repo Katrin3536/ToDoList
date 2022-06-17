@@ -4,7 +4,7 @@ import {TasksList} from './TasksList/TasksList';
 import AddItemForm from '../../components/AddItemsForm/AddItemForm';
 import Button from '@mui/material/Button';
 import {FilterValuesType} from './todolist-reducer';
-import {TaskStatuses, TaskType} from '../../api/todolists-api';
+import {DomainTaskType, TaskStatuses, TaskType} from '../../api/todolists-api';
 import {fetchTasksTC} from './tasks-reducer';
 import { useDispatch } from 'react-redux';
 import {RequestStatusType} from '../../app/app-reducer';
@@ -13,7 +13,7 @@ type ToDoListPropsType = {
     todolistID: string
     titleEL: string,
     filter: FilterValuesType,
-    tasks: Array<TaskType>,
+    tasks: Array<DomainTaskType>,
     removeTasks: (todolistID: string, Taskid: string) => void,
     addTask: (todolistID: string, title: string) => void,
     changeFilter: (todolistID: string, filter: FilterValuesType) => void,
@@ -76,7 +76,6 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
                 removeTasks={removeTasks}
                 changeStatus={restProps.changeStatus}
                 onChangeTitle={restProps.onChangeTitle}
-                entityStatus={restProps.entityStatus}
             />
 
             <div>

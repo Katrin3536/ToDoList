@@ -76,8 +76,9 @@ export type TaskType = {
     todoListId: string
     order: number
     addedDate: string
-    entityStatus: RequestStatusType
 }
+export type DomainTaskType =  TaskType & { entityStatus: RequestStatusType }
+
 export type BaseResponseType<D = {}> = {
     resultCode: number
     messages: Array<string>

@@ -183,7 +183,6 @@ test('correct task should be added to correct array', () => {
         id: 'sdf',
         title: 'juice',
         priority: 0,
-        entityStatus: 'idle'
     });
 
     const endState = tasksReducer(startState, action);

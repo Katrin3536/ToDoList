@@ -8,11 +8,13 @@ import {tasksReducer} from '../features/todolists/tasks-reducer';
 import {todolistReducer} from '../features/todolists/todolist-reducer';
 import {TaskPriorities, TaskStatuses} from '../api/todolists-api';
 import {appReducer} from './app-reducer';
+import {authReducer} from '../features/login/auth-reducer';
 
 const rootReducer = combineReducers({
     tasks: tasksReducer,
     todolists: todolistReducer,
-    app:appReducer
+    app:appReducer,
+    auth:authReducer
 });
 
 const initialGlobalState = {
@@ -80,8 +82,12 @@ const initialGlobalState = {
     },
     app: {
         status:'loaging',
-        error: null
-    }
+        error: null,
+        isInitialized: false
+    },
+    auth: {
+        isLoggedIn: false,
+    },
 };
 
 export const storyBookStore = createStore(rootReducer, initialGlobalState as AppRootStateType);

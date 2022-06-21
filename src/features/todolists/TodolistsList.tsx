@@ -16,13 +16,18 @@ import Paper from '@mui/material/Paper';
 import AddItemForm from '../../components/AddItemsForm/AddItemForm';
 import ToDoList from './ToDoList';
 import {TodolistTaskType} from '../../app/App';
+import {Navigate} from 'react-router-dom'
 
-export const TodolistsList:React.FC = (props) => {
+export const TodolistsList:React.FC = () => {
     let dispatch = useDispatch();
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists);
     const tasks = useSelector<AppRootStateType, TodolistTaskType>(state => state.tasks);
+    const isLoggedIn = useSelector<AppRootStateType,boolean>(state=>state.auth.isLoggedIn)
 
     useEffect(() => {
+        if(!isLoggedIn){
+            return
+        }
         dispatch(fetchTodosThunkTC());
     }, [dispatch]);
 
@@ -71,6 +76,10 @@ export const TodolistsList:React.FC = (props) => {
         dispatch(changeTitleTodolistTC(todolistID, title));
         // setTodolists(todolists.map(t => t.id === todolistID ? {...t, title} : t));
     }, [dispatch]);
+
+    if(!isLoggedIn) {
+        return <Navigate to='/login'/>
+    }
 
     return <>
         <Grid container> <Paper style={{padding: '10px'}} elevation={3}><AddItemForm callback={addNewTodolist}/></Paper></Grid>

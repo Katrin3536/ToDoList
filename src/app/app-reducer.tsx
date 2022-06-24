@@ -21,27 +21,34 @@ export const appReducer = (state: InitialStateType = initialState, action: Actio
         case 'APP/SET-ERROR':
             return {...state, error: action.error};
         case 'APP/SET-IS-INITIALIZED':
-            return {...state, isInitialized: action.isInitialized}
+            return {...state, isInitialized: action.isInitialized};
         default:
             return state;
     }
 };
 
-export const setIsInitializedAC = (isInitialized: boolean) => ({type: 'APP/SET-IS-INITIALIZED', isInitialized} as const);
+export const setIsInitializedAC = (isInitialized: boolean) => ({
+    type: 'APP/SET-IS-INITIALIZED',
+    isInitialized
+} as const);
 export const setAppStatusAC = (status: RequestStatusType) => ({type: 'APP/SET-STATUS', status} as const);
 export const setAppErrorAC = (error: null | string) => ({type: 'APP/SET-ERROR', error} as const);
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     authAPI.me().then(res => {
+        console.log(res);
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC(true));
-            dispatch(setIsInitializedAC(true))
         } else {
             handleAppError(dispatch, res.data);
         }
     })
         .catch((err: AxiosError) => {
             handleNetworkError(dispatch, err.message);
+        })
+        .finally(() => {
+            dispatch(setIsInitializedAC(true));
         });
+
 };
 
 

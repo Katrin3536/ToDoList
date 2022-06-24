@@ -29,9 +29,9 @@ function App() {
     const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized);
     const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn);
 
-    useEffect(()=>{
-        dispatch(initializeAppTC())
-    },[])
+    useEffect(() => {
+        dispatch(initializeAppTC());
+    }, []);
 
     if (!isInitialized) {
         return <div
@@ -64,9 +64,9 @@ function App() {
             <Container fixed style={{padding: '20px'}}>
                 <Routes>
                     <Route path="/" element={<TodolistsList/>}/>
-                    <Route path="/login" element={<Login/>}/>
+                    <Route path="login" element={<Login/>}/>
                     <Route path={'/404'} element={<h1>404:PAGE NOT FOUND</h1>}/>
-                    <Route path={'/*'} element={<Navigate to="/404"/>}/>
+                    <Route path={'*'} element={<Navigate to="/404"/>}/>
                 </Routes>
             </Container>
         </div>

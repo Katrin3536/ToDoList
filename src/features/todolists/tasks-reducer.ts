@@ -1,6 +1,6 @@
 import {TodolistTaskType} from '../../app/App';
 import {
-    AddTodolistActionType,
+    AddTodolistActionType, ClearDataActionType,
     RemoveTodolistActionType,
     SetTodolistsActionType
 } from './todolist-reducer';
@@ -13,12 +13,14 @@ import {handleAppError, handleNetworkError} from '../../utils/errorUtils';
 
 const inisialState: TodolistTaskType = {};
 
-export const tasksReducer = (state: TodolistTaskType = inisialState, action: ActionsType):TodolistTaskType => {
+export const tasksReducer = (state: TodolistTaskType = inisialState, action: ActionsType): TodolistTaskType => {
     switch (action.type) {
         case 'TASKS/SET-TASKS':
-            return {...state, [action.todolistId]: action.tasks.map(el=>{
-            return {...el, entityStatus:"idle"}
-            })}
+            return {
+                ...state, [action.todolistId]: action.tasks.map(el => {
+                    return {...el, entityStatus: 'idle'};
+                })
+            };
         case 'TODOLIST/SET-TODOS': {
             const stateCopy = {...state};
             action.todolists.forEach((tl) => {
@@ -30,7 +32,10 @@ export const tasksReducer = (state: TodolistTaskType = inisialState, action: Act
             return {...state, [action.todolistID]: state[action.todolistID].filter(el => el.id !== action.taskId)};
         }
         case 'TASKS/ADD-TASK':
-            return {...state, [action.task.todoListId]: [{...action.task, entityStatus:'idle'}, ...state[action.task.todoListId]]};
+            return {
+                ...state,
+                [action.task.todoListId]: [{...action.task, entityStatus: 'idle'}, ...state[action.task.todoListId]]
+            };
         case 'TASKS/CHANGE-TASK-STATUS':
             return {
                 ...state,
@@ -55,6 +60,8 @@ export const tasksReducer = (state: TodolistTaskType = inisialState, action: Act
                 [action.todolistID]: state[action.todolistID]
                     .map(el => el.id === action.taskId ? {...el, entityStatus: action.entityStatus} : el)
             };
+        case 'CLEAR-DATA':
+            return {};
         default:
             return state;
     }
@@ -124,7 +131,7 @@ export const updateTaskStatusTC = (todolistId: string, taskId: string, status: T
         const state = getState();
         const allAppTasks = state.tasks;
         const tasksForCurrentTodo = allAppTasks[todolistId];
-        const changedTask = tasksForCurrentTodo.find((el:TaskType)=> el.id === taskId);
+        const changedTask = tasksForCurrentTodo.find((el: TaskType) => el.id === taskId);
         if (changedTask) {
             const model: UpdateTaskModelType = {
                 title: changedTask.title,
@@ -184,7 +191,10 @@ export type ActionsType =
     | AddTodolistActionType
     | RemoveTodolistActionType
     | SetTodolistsActionType
-    | ReturnType<typeof setTasksAC>
+    | SetTasksActionType
     | SetAppStatusActionType
     | SetAppErrorActionType
     | ReturnType<typeof changeTaskEntityStatusAC>
+    | ClearDataActionType
+
+export type SetTasksActionType = ReturnType<typeof setTasksAC>

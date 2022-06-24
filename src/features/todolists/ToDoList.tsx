@@ -1,12 +1,10 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import ToDoListHeader from './TodolistHeader/ToDoListHeader';
 import {TasksList} from './TasksList/TasksList';
 import AddItemForm from '../../components/AddItemsForm/AddItemForm';
 import Button from '@mui/material/Button';
 import {FilterValuesType} from './todolist-reducer';
-import {DomainTaskType, TaskStatuses, TaskType} from '../../api/todolists-api';
-import {fetchTasksTC} from './tasks-reducer';
-import { useDispatch } from 'react-redux';
+import {DomainTaskType, TaskStatuses} from '../../api/todolists-api';
 import {RequestStatusType} from '../../app/app-reducer';
 
 type ToDoListPropsType = {
@@ -35,11 +33,11 @@ const ToDoList: React.FC<ToDoListPropsType> = ({
                                                    ...restProps
                                                }) => {
 
-    let dispatch = useDispatch()
-
-    useEffect(()=>{
-        dispatch(fetchTasksTC(todolistID))
-    },[dispatch, todolistID])
+    // let dispatch = useDispatch()
+    //
+    // useEffect(()=>{
+    //     dispatch(fetchTasksTC(todolistID))
+    // },[dispatch, todolistID])
 
     const addItem = useCallback((title: string) => {
         addTask(todolistID, title);

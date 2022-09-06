@@ -51,6 +51,8 @@ export const Login = () => {
     if(isLoggedIn) {
        return <Navigate to="/"/>
     }
+
+    console.log(formik.errors, formik.touched);
     return <Grid container justifyContent={'center'}>
         <Grid item justifyContent={'center'}>
             <form onSubmit={formik.handleSubmit}>
